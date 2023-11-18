@@ -8,7 +8,6 @@ from keras.models import Model
 from keras.layers import Input, Dense, Multiply, Dropout, Attention
 from keras.losses import mean_squared_error
 from keras.utils import plot_model
-from keract import get_activations
 from keras import backend as K
 from sklearn.model_selection import train_test_split
 
