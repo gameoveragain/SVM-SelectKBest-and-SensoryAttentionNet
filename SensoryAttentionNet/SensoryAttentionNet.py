@@ -24,11 +24,14 @@ def loadData(path='../Data/OilSourceGeochemicalData.xlsx', sheet_name='oil sourc
     df['S12'] = df['BS12'] + df['QS12']
     df['S3'] = df['BS3'] + df['QS3']
     y = df.loc[:, ['D3', 'S12', 'S3']]
-    # print(df.loc[:, ['D3', 'S12', 'S3']])
+
     print(x.shape, y.shape)
     return x, y
 
 def Att(att_dim, inputs):
+    '''
+    Attention mechanism
+    '''
     V = inputs
     QK = Dense(att_dim, bias_regularizer=None, activation='ReLU')(inputs)
     QK = Attention()([QK, QK])
@@ -52,6 +55,9 @@ def build_model():
 
 
 def get_activations(model, input_data, print_shape_only=False, layer_name=None):
+    '''
+    Get the output of the specified layer
+    '''
     if layer_name:
         intermediate_layer_model = Model(inputs=model.input, outputs=model.get_layer(layer_name).output)
         activations = intermediate_layer_model.weights
@@ -78,15 +84,16 @@ if __name__ == '__main__':
     saveDir='result/'
     if not os.path.exists(saveDir):
         os.makedirs(saveDir)
+    
+    # Load data
     X, y = loadData()
     
+    # Split data and build model
     X_train, X_test, y_train, y_test=splitData(X.values, y.values, ratio=0.30)
-
     model = build_model()
-    # print(X_train[0])
-    # print(y_train[0])
+
     
-    #模型结果可视化
+    # Visualization of model results
     try:
         plot_model(model,to_file=saveDir+"model_structure.png",show_shapes=True)
     except Exception as e:
@@ -95,7 +102,7 @@ if __name__ == '__main__':
     print(model.summary())
     history=model.fit(X_train, y_train, epochs=65, batch_size=16, validation_split=0.2)
     
-    # #Loss曲线MSE曲线可视化
+    # Loss curve MSE curve visualization
     print(history.history.keys())
     historyResult={}
     plt.clf()
@@ -117,15 +124,14 @@ if __name__ == '__main__':
     plt.savefig(saveDir+'train_validation_loss.png')
     
     plt.clf()
+    
     # Get attention mechanism values for the 'attention_vec' layer
-    attention_vector = np.array(get_activations(model, X_test, print_shape_only=False, layer_name='attention')[0])
-    
+    attention_vector = np.array(get_activations(model, X_test, print_shape_only=False, layer_name='attention')[0]) 
     attention_weights = np.abs(attention_vector.sum(axis=1)) / np.sum(np.abs(attention_vector.sum(axis=1)))
-    
     pd.Series(attention_weights).to_csv(saveDir+'attention_weights.csv', index=False, header=False)
+    
     # Plot attention weights as a bar chart
-    input_dimensions = np.arange(1, 95)  # Assuming 94 input dimensions
-
+    input_dimensions = np.arange(1, 95)
     df = pd.DataFrame({'Input Dimensions': input_dimensions, 'Attention Weight': attention_weights})
 
     # Increase the size of the figure and adjust x-axis label rotation
@@ -137,7 +143,8 @@ if __name__ == '__main__':
     ax.xaxis.set_major_locator(MultipleLocator(base=2))
 
     plt.savefig(saveDir+'attention.png')
-
+    
+    # Save model
     scores=model.evaluate(X_test,y_test,verbose=0)
     print('MSE: %.2f' % (scores[1]))
     historyResult['mse']=history.history['mse']
