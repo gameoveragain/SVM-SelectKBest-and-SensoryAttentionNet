@@ -11,7 +11,7 @@ The environment dependencies required to execute the code are outlined in the `r
 
 ## Usage
 
-- To utilize the SVM-SelectKBest model, execute the `SVM-SelectKBest\SVM-SelectKBest.ipynb`.
+- To utilize the SVM-SelectKBest model, execute the `SVM-SelectKBest\SVM_SelectKBest.py`.
 - To utilize the SensoryAttentionNet model, execute the `SensoryAttentionNet\SensoryAttentionNet.py`. And The outcomes of the model run will be stored in the `SensoryAttentionNet\results\`.
 - The data required to execute the code is stored in the file `Data\OilSourceGeochemicalData.xlsx`.
 
