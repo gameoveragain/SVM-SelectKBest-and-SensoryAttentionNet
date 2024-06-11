@@ -5,6 +5,8 @@ SVM-SelectKBest and SensoryAttentionNet are projects based on Python 3.9.13, off
 > Yifeng Xiao, Tongxi Wang and Hua Xiang (submitted) Optimizing Oil-Source Correlation Analysis Using Support Vector Machines and Sensory Attention Networks. 
 > Submitted to Computers and Geosciences, 2023.
 
+See the [paper](https://doi.org/10.1016/j.cageo.2024.105641) for details.
+
 ## Requirements
 
 The environment dependencies required to execute the code are outlined in the `requirements.txt`.
